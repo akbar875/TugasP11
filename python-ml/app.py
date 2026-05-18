@@ -13,6 +13,9 @@ jwt = JWTManager(app)
 model = joblib.load("model.pkl")
 normalisasi = joblib.load("normalisasi.pkl")
 
+# Simulasi database user (disimpan di memori)
+users_db = {}
+
 # Melabel kelas wine dengan angka
 label_wine = {
     0: "Kelas 1 (Wine A)",
@@ -43,21 +46,46 @@ def kesehatan():
         "dataset": "Wine"
     }), 200
 
+# Route untuk melakukan registrasi
+@app.route("/register", methods=["POST"])
+def register():
+    data = request.get_json()
+
+    # Validasi input username dan password wajib ada
+    if not data or "username" not in data or "password" not in data:
+        return jsonify({"pesan": "Username dan password wajib diisi"}), 400
+
+    # Validasi username dan password tidak boleh kosong
+    if not data["username"].strip() or not data["password"].strip():
+        return jsonify({"pesan": "Username dan password tidak boleh kosong"}), 400
+
+    # Validasi username sudah terdaftar
+    if data["username"] in users_db:
+        return jsonify({"pesan": "Username sudah terdaftar"}), 409
+
+    # Simpan user ke database simulasi
+    users_db[data["username"]] = data["password"]
+    return jsonify({"pesan": "Registrasi berhasil, silakan login"}), 201
+
 # Route untuk melakukan login
 @app.route("/login", methods=["POST"])
 def login():
     data = request.get_json()
 
-    # Validasi input nama dan password wajib ada
+    # Validasi input username dan password wajib ada
     if not data or "username" not in data or "password" not in data:
         return jsonify({"pesan": "Username dan password wajib diisi"}), 400
 
-    # Validasi username dan password
-    if data["username"] == "admin" and data["password"] == "admin123":
-        token = create_access_token(identity=data["username"])
-        return jsonify({"token": token})
+    # Validasi username terdaftar
+    if data["username"] not in users_db:
+        return jsonify({"pesan": "Username tidak ditemukan, silakan register terlebih dahulu"}), 401
 
-    return jsonify({"pesan": "Username atau password salah"}), 401
+    # Validasi password 
+    if users_db[data["username"]] != data["password"]:
+        return jsonify({"pesan": "Password salah"}), 401
+
+    token = create_access_token(identity=data["username"])
+    return jsonify({"token": token}), 200
 
 # Route untuk melakukan prediksi
 @app.route("/prediksi", methods=["POST"])

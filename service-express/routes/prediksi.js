@@ -6,7 +6,8 @@ const URL_ML = 'http://localhost:7070';
 
 // Metode untuk melakukan prediksi
 router.post('/', async (req, res) => {
-    const { fitur, token } = req.body;
+    const { fitur } = req.body;
+    const token = req.headers.authorization?.split(' ')[1];
 
     // Validasi input fitur wajib di isi
     if (!fitur || !Array.isArray(fitur)) {
@@ -53,7 +54,8 @@ router.post('/', async (req, res) => {
 
 // Metode untuk melakukan prediksi batch
 router.post('/batch', async (req, res) => {
-    const { data, token } = req.body;
+    const { data } = req.body;
+    const token = req.headers.authorization?.split(' ')[1];
 
     // Validasi input data wajib diisi
     if (!data || !Array.isArray(data)) {
