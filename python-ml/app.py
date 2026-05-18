@@ -23,7 +23,7 @@ def kesehatan():
         "layanan": "python-ml-flask",
         "model": "Regresi Logistik",
         "dataset": "Wine"
-    })
+    }), 200
 
 # Route untuk melakukan prediksi
 @app.route("/prediksi", methods=["POST"])
@@ -52,10 +52,10 @@ def prediksi():
             "label": label_wine[int(hasil_prediksi[0])],
             "tingkat_keyakinan": float(probabilitas.max()),
             "layanan": "python-ml-flask"
-        })
+        }), 200
 
     except Exception as e:
         return jsonify({ "pesan_error": str(e) }), 500
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=7001, debug=True)
+    app.run(host="0.0.0.0", port=7070, debug=True)
