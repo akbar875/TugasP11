@@ -13,15 +13,17 @@ yaitu Python Flask untuk ML dan Express.js sebagai penghubungnya.
 ## Struktur Folder
 TugasP11/
 ├── python-ml/
-│   ├── train_model.py
-│   ├── app.py
-│   ├── model.pkl
-│   └── scaler.pkl
-├── express-service/
-│   ├── index.js
+│   ├── train_model.py        
+│   ├── app.py                
+│   ├── model.pkl             
+│   └── normalisasi.pkl       
+│   
+├── service-express/
 │   ├── routes/
-│   │   └── prediksi.js
+│   │   └── prediksi.js      
+│   ├── index.js              
 │   └── package.json
+|
 └── README.md
 
 ## Cara Install dan Jalankan
@@ -55,12 +57,16 @@ Jalan di http://localhost:8000
 
 ### Flask (port 7070)
 - GET /health
+- POST /register
+- POST /login
 - POST /prediksi
+- POST /batch-prediksi
 
 ### Express (port 8000)
 - GET /health
 - GET /api/prediksi/health
 - POST /api/prediksi
+- POST /api/prediksi/batch
 
 ## Contoh Pemakaian
 Kirim POST ke http://localhost:8000/api/prediksi dengan body:
@@ -74,5 +80,91 @@ Kalau fitur kurang dari 13 akan muncul:
 ```json
 {
   "pesan": "Fitur harus berjumlah 13"
+}
+```
+
+Kirim GET ke http://localhost:7070/health untuk cek layanan Flask:
+```json
+{
+  "status": "aktif",
+  "layanan": "python-ml-flask",
+  "model": "Regresi Logistik",
+  "dataset": "Wine"
+}
+```
+
+Kirim GET ke http://localhost:8000/api/prediksi/health untuk cek koneksi antar layanan:
+```json
+{
+  "layanan_express": "aktif",
+  "layanan_ml": {
+    "status": "aktif",
+    "layanan": "python-ml-flask",
+    "model": "Regresi Logistik",
+    "dataset": "Wine"
+  }
+}
+```
+
+Kirim POST ke http://localhost:7070/register dengan body:
+```json
+{
+  "username": "akbar",
+  "password": "rahasia123"
+}
+```
+
+Responsnya:
+```json
+{
+  "pesan": "Registrasi berhasil, silakan login"
+}
+```
+
+Kirim POST ke http://localhost:7070/login dengan body:
+```json
+{
+  "username": "akbar",
+  "password": "rahasia123"
+}
+```
+
+Responsnya:
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
+
+Kirim POST ke http://localhost:7070/batch-prediksi dengan header Authorization: Bearer <token> dan body:
+```json
+{
+  "data": [
+    [14.13, 1.71, 2.43, 15.16, 127.0, 2.80, 3.06, 0.28, 2.29, 5.64, 1.04, 3.92, 1065.0],
+    [13.20, 1.78, 2.14, 11.20, 100.0, 2.65, 2.76, 0.26, 1.28, 4.38, 1.05, 3.40, 1050.0]
+  ]
+}
+```
+
+Responsnya:
+```json
+{
+  "total": 2,
+  "hasil": [
+    {
+      "index": 0,
+      "prediksi": 0,
+      "label": "Kelas 1 (Wine A)",
+      "keyakinan": 0.9998,
+      "layanan": "python-ml-flask"
+    },
+    {
+      "index": 1,
+      "prediksi": 0,
+      "label": "Kelas 1 (Wine A)",
+      "keyakinan": 0.9954,
+      "layanan": "python-ml-flask"
+    }
+  ]
 }
 ```

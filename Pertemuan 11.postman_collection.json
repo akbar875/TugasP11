@@ -8,6 +8,84 @@
   },
   "item": [
     {
+      "name": "Port 7070",
+      "item": [
+        {
+          "name": "Health Flask",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:7070/register",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "7070",
+              "path": [
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "Prediksi Flask",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:7001/prediksi",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "7001",
+              "path": [
+                "prediksi"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Prediksi Batch",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:7070/batch-prediksi",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "7070",
+              "path": [
+                "batch-prediksi"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
       "name": "Health Express",
       "request": {
         "method": "GET",
@@ -83,27 +161,21 @@
       "response": []
     },
     {
-      "name": "Health Flask",
-      "request": {
-        "method": "GET",
-        "header": []
-      },
-      "response": []
-    },
-    {
-      "name": "Prediksi Flask",
+      "name": "Prediksi Batch",
       "request": {
         "method": "POST",
         "header": [],
         "url": {
-          "raw": "http://localhost:7001/prediksi",
+          "raw": "http://localhost:8000/api/prediksi/batch",
           "protocol": "http",
           "host": [
             "localhost"
           ],
-          "port": "7001",
+          "port": "8000",
           "path": [
-            "prediksi"
+            "api",
+            "prediksi",
+            "batch"
           ]
         }
       },
